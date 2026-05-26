@@ -1,0 +1,6 @@
+# Ignore local script caches
+assets/cache/
+
+# OS specific files
+.DS_Store
+Thumbs.db

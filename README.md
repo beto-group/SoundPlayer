@@ -1,8 +1,9 @@
+
 <div align="center">
   <a name="readme-top"></a>
   <img src="https://raw.githubusercontent.com/beto-group/beto.assets/main/BETO.logo.animated.svg?raw=true" alt="LOGO" width="160">
   <h1 align="center">SOUND PLAYER</h1>
-  <h3 align="center"> Mɪɴɪᴍᴀʟɪsᴛ Aᴜᴅɪᴏ Pʟᴀʏᴇʀ & Dʀᴀɢ-Dʀᴏᴘ Zᴏɴᴇ </h3>
+  <h3 align="center"> Mᴏᴅᴇʀɴ Dɪɢɪᴛᴀʟ Aᴜᴅɪᴏ Pʟᴀʏᴇʀ </h3>
 </div>
 
 <div align="center">
@@ -13,54 +14,38 @@
   <br/>
   <!-- BOTTOM GOLD TAXONOMY -->
   <img src="https://img.shields.io/badge/TARGET-DATACORE-000?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkUxNjUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48ZWxsaXBzZSBjeD0iMTIiIGN5PSI1IiByeD0iOSIgcnk9IjMiLz48cGF0aCBkPSJNIDMgNXYxNGE5IDMgMCAwIDAgMTggMHYtMTQiLz48cGF0aCBkPSJNIDMgMTJhOSAzIDAgMCAwIDE4IDAiLz48L3N2Zz4=" alt="TARGET">
-  <img src="https://img.shields.io/badge/SECURITY-SANDBOXED-000?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkUxNjUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjAgMTNjMCA1LTMuNSA3LjUtNy42NiA4Ljk1YTEgMSAwIDAgMS0uNjctLjAxQzcuNSAyMC41IDQgMTggNCAxM1Y2YTEgMSAwIDAgMSAxLTFjMiAwIDQuNS0xLjIgNi4yNC0yLjcyYTEuMTcgMS4xNyAwIDAgMSAxLjUyIDBDMTQuNTEgMy44MSAxNyA1IDE5IDVhMSAxIDAgMCAxIDEgMXoiLz48L3N2Zz4=" alt="SECURITY">
-  <img src="https://img.shields.io/badge/RUNTIME-PUREJS-000?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkUxNjUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjEgMTZWMGgtNXYxNloiLz48cGF0aCBkPSJNMyAxNnYtNWg1djVaIi8+PHBhdGggZD0iTTEyIDE2VjhoLTV2OFoiLz48L3N2Zz4=" alt="RUNTIME">
+  <img src="https://img.shields.io/badge/SECURITY-VAULT_FS-000?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkUxNjUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjAgMTNjMCA1LTMuNSA3LjUtNy42NiA4Ljk1YTEgMSAwIDAgMS0uNjctLjAxQzcuNSAyMC41IDQgMTggNCAxM1Y2YTEgMSAwIDAgMSAxLTFjMiAwIDQuNS0xLjIgNi4yNC0yLjcyYTEuMTcgMS4xNyAwIDAgMSAxLjUyIDBDMTQuNTEgMy44MSAxNyA1IDE5IDVhMSAxIDAgMCAxIDEgMXoiLz48L3N2Zz4=" alt="SECURITY">
+  <img src="https://img.shields.io/badge/RUNTIME-REACT-000?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkUxNjUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTQuNSAySDZhMiAyIDAgMCAwLTIgMnYxNmEyIDAgMCAwIDAgMiAyaDEyYTIgMiAwIDAgMCAyLTJWNy41TDE0LjUgMnoiLz48cG9seWxpbmUgcG9pbnRzPSIxNCAyIDE0IDggMjAgOCIvPjxsaW5lIHgxPSIxNiIgeDI9IjgiIHkxPSIxMyIgeTI9IjEzIi8+PGxpbmUgeDE9IjE2IiB4Mj0iOCIgeTE9IjE3IiB5Mj0iMTciLz48bGluZSB4MT0iMTAiIHgyPSI4IiB5MT0iOSIgeTI9IjkiLz48L3N2Zz4=" alt="RUNTIME">
   <hr>
 </div>
 
 <img src="assets/soundplayer.clip.gif" alt="Sound Player Walkthrough" width="100%">
 
-<div align="center">
-  <p><i>A minimalist, single-track audio player featuring drag-and-drop file loading and a clean, distraction-free full-pane interface.</i></p>
-</div>
+<p align="center"><i>An interactive digital audio player featuring custom drag-and-drop song loading, timeline scrubbing, volume controls, and full-tab mode overlays.</i></p>
 
----
+The Sound Player component provides an elegant audio execution layout in the Obsidian vault content pane. It defaults to playing a standard Beto minigame wav soundtrack, but allows users to drag and drop local audio files (WAV, MP3, MP4) directly onto the deck to switch tracks instantly.
 
-## 📌 Introduction & Overview
+## Features
 
-**Sound Player** is a modern, minimalist audio player designed for a focused listening experience within Obsidian Datacore. It provides an intuitive drag-and-drop interface capable of directly loading files from your operating system or Obsidian's file explorer.
+- **🛡️ Runtime & Agentic Safety**: Configured with a polling watch daemon monitoring `data/mcp_commands.json` for hot reloading, and uses local cache helpers under `assets/cache/` to ensure offline stability.
+- **🔐 Drag-and-Drop Loader**: Implements seamless system drag listeners supporting local file dropping and native Object URLs to parse and load external sound files.
+- **📐 User Interface**: Features full-tab immersive DOM reparenting to override standard headers, glowing borders, custom progress range seeks, and volume percentage sliders.
 
-Operating entirely inside a fully immersive window-pane overlay, it removes standard markdown visual clutter, allowing for a pure, distraction-free environment while still giving you precise playback, seeking, and volume control.
-
----
-
-## ✨ Features
-
-### 🎧 Seamless Playback Control
-*   **Intuitive UI**: A sleek, dark-themed interface accented with subtle interactive effects.
-*   **Precision Control**: Features standard interactive playback options including a clickable seeking progress bar, a volume slider, and total duration tracking.
-
-### 📥 Drag-and-Drop Architecture
-*   **Instant Context Switching**: Drag any `.wav`, `.mp3`, or audio `.mp4` into the drop zone from your local OS to instantly override and play the new track.
-*   **Vault Interoperability**: Fully supports internal Obsidian link dragging directly into the zone.
-
-### 📦 Embedded Media
-*   **BETO Original Soundtrack**: Includes the high-quality, default `beto.minigame.soundtrack.wav` loaded instantly out-of-the-box.
-*   **Zero Dependencies**: Completely disconnected from external networks, operating in 100% pure JS within the Datacore environment.
-
----
-
-## 📦 Directory Index & Components
+## Directory Index & Components
 
 The package exposes the following compiled files:
 
 | File | Description |
 | :--- | :--- |
-| **[SOUND PLAYER.md](SOUND%20PLAYER.md)** | Standard Obsidian active rendering leaf |
-| **[src/index.jsx](src/index.jsx)** | Main bootstrapper with our robust polling daemon loop |
-| **[src/App.jsx](src/App.jsx)** | Orchestrates the audio logic, DOM traversals, and drag-and-drop handling |
-| **[data/mcp_commands.json](data/mcp_commands.json)** | Local agent control loop daemon |
-| **[assets/beto.minigame.soundtrack.wav](assets/beto.minigame.soundtrack.wav)** | Default embedded high-quality audio track |
-| **[METADATA.md](METADATA.md)** | Universal metadata manifest |
-| **[CONTRIBUTION.md](CONTRIBUTION.md)** | Engineering standards and contributor guidelines |
-| **[LICENSE.md](LICENSE.md)** | The MIT permissable software distribution license |
+| **[SOUND PLAYER.md](SOUND PLAYER.md)** | The main entry point note to be loaded in the Obsidian workspace leaf. |
+| **[src/index.jsx](src/index.jsx)** | Main entry bootstrapper coordinating the watch reload daemon and FullTab style injection. |
+| **[src/App.jsx](src/App.jsx)** | Main layout component managing the audio tags, states, and drag events. |
+| **[src/components/AudioControls.jsx](src/components/AudioControls.jsx)** | Playback controls, dropzone UI, timeline slider, and volume handles. |
+| **[src/utils/domUtils.js](src/utils/domUtils.js)** | DOM traversal helper functions to locate target leaf wrappers. |
+| **[src/utils/loadScript.js](src/utils/loadScript.js)** | Offline caching local script loader. |
+| **[METADATA.md](METADATA.md)** | Packaging manifest containing security, network, and indexing declarations. |
+| **[CONTRIBUTION.md](CONTRIBUTION.md)** | Developer roadmap and layout rules. |
+| **[LICENSE.md](LICENSE.md)** | MIT open-source license. |
+
+## Contributors
+- beto.group

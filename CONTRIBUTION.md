@@ -1,24 +1,40 @@
-# 🛠️ Contributing to Basic View (main)
+# Contribution Guidelines — Sound Player
 
-Welcome! This document outlines the core developer standards, unit testing frameworks, and compilation guidelines required to maintain the advanced implementation of the Basic View.
+Welcome! This component is part of the BetoOS Datacore library. Please adhere to the following architectural standards.
 
----
+## Codebase Architecture
 
-## 🏛️ Core Architecture Pillars
+The module utilizes a split-file structure to guarantee legibility, testability, and isolated execution scopes:
 
-1.  **Full-Pane DOM Interception**:
-    *   The view targets the nearest `.workspace-leaf-content` ancestor and replaces standard Markdown leaves with a full-pane portal overlay.
-    *   Dynamic lifecycle hooks (`useFullTab`) manage mounting and cleanups edge-to-edge.
-2.  **Anti-Bleed Style Isolation**:
-    *   All styles must be scoped tightly under standard container class keys (`.basic-folder-view-container`) to avoid spilling into the Obsidian UI or interfering with active user themes.
-3.  **Automated Unit Testing Framework**:
-    *   This component features a built-in automated test suite (`vitest` / Preact testing library) run inside a custom interactive client test runner (`src/TestRunner.jsx`). All layout modifications must pass the test suites before shipping.
-4.  **Sterile Zero-Dependency Flow**:
-    *   The view must rely strictly on standard pre-loaded React hooks (`useState`, `useEffect`, `useRef`) provided by the `dc` host workspace compiler leaf.
+```text
+SOUND PLAYER/
+├── SOUND PLAYER.md        # Obsidian entry point
+├── METADATA.md            # Component manifest
+├── README.md              # Documentation
+├── CONTRIBUTION.md        # This file
+├── LICENSE.md             # MIT license
+├── data/
+│   └── mcp_commands.json  # Hot reload trigger
+├── assets/
+│   ├── sound_player.webp  # Static preview image
+│   ├── soundplayer.clip.gif # Immersive preview clip
+│   └── music/
+│       └── beto.minigame.soundtrack.wav # Default audio soundtrack
+└── src/
+    ├── index.jsx          # CSS Injector & reload daemon
+    ├── App.jsx            # Main layout and coordinator
+    ├── components/
+    │   └── AudioControls.jsx # Playback panel & drag UI controls
+    └── utils/
+        ├── domUtils.js    # Workspace leaf node locators
+        └── loadScript.js  # Script & CDN resource local cache manager
+```
 
----
+## Developer Standard
 
-## 🚀 Local Compilation & Test Runner Loop
-
-*   **Test Suite Entry Point**: The client test runner is loaded at `src/TestRunner.jsx`. It performs assertions on layout behaviors, DOM injections, and cleanup triggers.
-*   **Hot Reload Trigger**: During development, use the reload action menu or press the reload button inside the UI panel to invoke `dc.app.workspace.activeLeaf.rebuildView()`. This automatically flushes Obsidian's internal module cache, loading your latest React changes instantly with zero system reboots.
+1. **Strict Zero standard emojis**: All UI elements, buttons, headers, and control indicators must use Lucide vector icons (`<dc.Icon>`) or plain text. Emojis are reserved strictly for documentation.
+2. **Path safety**: Do not hardcode absolute path strings (e.g. `/Volumes/` or `file:///`). Always resolve vault directories via the `dc.resolvePath` wrapper.
+3. **Hot Module Reload**: The hot reload watch daemon monitors modification times of `data/mcp_commands.json`. To force a live reload of the component inside Obsidian:
+   ```bash
+   echo '{"action":"reload","timestamp":'`date +%s`000`,"executed":true}' > data/mcp_commands.json
+   ```

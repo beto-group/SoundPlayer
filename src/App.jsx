@@ -1,50 +1,27 @@
-// --- DOM Traversal Utilities ---
-function findNearestAncestorWithClass(element, className) {
-  if (!element) return null;
-  let current = element.parentNode;
-  while (current) {
-    if (current.classList && current.classList.contains(className)) {
-      return current;
-    }
-    current = current.parentNode;
-  }
-  return null;
-}
+const { findNearestAncestorWithClass, findDirectChildByClass } = await dc.require(dc.resolvePath("SOUND PLAYER/src/utils/domUtils.js"));
+const { AudioControls } = await dc.require(dc.resolvePath("SOUND PLAYER/src/components/AudioControls.jsx"));
 
-function findDirectChildByClass(parent, className) {
-  if (!parent) return null;
-  for (const child of parent.children) {
-    if (child.classList && child.classList.contains(className)) {
-      return child;
-    }
-  }
-  return null;
-}
+function App(props) {
+  const { dc } = props;
+  const { useState, useEffect, useRef } = dc;
 
-// =================================================================================
-//  SOUND PLAYER COMPONENT
-// =================================================================================
-function View({ folderPath, dc }) {
-  const instanceId = dc.useRef(Math.random().toString(36).substr(2, 5)).current;
+  const instanceId = useRef(Math.random().toString(36).substr(2, 5)).current;
   const uniqueWrapperClass = `sound-player-wrapper-${instanceId}`;
 
-  // Get default track from assets folder
-  const defaultSongPath = folderPath 
-    ? `${folderPath}/assets/beto.minigame.soundtrack.wav`
-    : null;
+  const defaultSongPath = dc.resolvePath("SOUND PLAYER/assets/music/beto.minigame.soundtrack.wav");
   
   // Audio state
-  const audioRef = dc.useRef(null);
-  const [isPlaying, setIsPlaying] = dc.useState(false);
-  const [currentTime, setCurrentTime] = dc.useState(0);
-  const [duration, setDuration] = dc.useState(0);
-  const [volume, setVolume] = dc.useState(0.7);
-  const [audioSrc, setAudioSrc] = dc.useState(null);
-  const [fileName, setFileName] = dc.useState("BETO.MINIGAME.SOUNDTRACK");
-  const [isDragging, setIsDragging] = dc.useState(false);
+  const audioRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [volume, setVolume] = useState(0.7);
+  const [audioSrc, setAudioSrc] = useState(null);
+  const [fileName, setFileName] = useState("BETO.MINIGAME.SOUNDTRACK");
+  const [isDragging, setIsDragging] = useState(false);
 
   // Initialize with default song
-  dc.useEffect(() => {
+  useEffect(() => {
     if (defaultSongPath) {
       const defaultSrc = app.vault.adapter.getResourcePath(defaultSongPath);
       setAudioSrc(defaultSrc);
@@ -52,9 +29,9 @@ function View({ folderPath, dc }) {
   }, [defaultSongPath]);
 
   // Full-tab state
-  const [isFullTab, setIsFullTab] = dc.useState(true);
-  const containerRef = dc.useRef(null);
-  const stateRefs = dc.useRef({}).current;
+  const [isFullTab, setIsFullTab] = useState(true);
+  const containerRef = useRef(null);
+  const stateRefs = useRef({}).current;
 
   // Styles
   const STYLES = {
@@ -274,7 +251,7 @@ function View({ folderPath, dc }) {
   };
 
   // Audio event handlers
-  dc.useEffect(() => {
+  useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
@@ -299,7 +276,7 @@ function View({ folderPath, dc }) {
     if (isPlaying) {
       audio.pause();
     } else {
-      audio.play();
+      audio.play().catch(e => console.warn("Playback prevented:", e));
     }
     setIsPlaying(!isPlaying);
   };
@@ -342,10 +319,7 @@ function View({ folderPath, dc }) {
     e.stopPropagation();
     setIsDragging(false);
 
-    // Try to get file from Obsidian's drag data
     const dragData = e.dataTransfer.getData('text/plain');
-
-    // Check for files in dataTransfer
     const files = e.dataTransfer.files;
 
     if (dragData) {
@@ -399,34 +373,78 @@ function View({ folderPath, dc }) {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // Full-tab effect
-  dc.useEffect(() => {
+  // Full-tab effect (Header-Safe FullTab standard)
+  useEffect(() => {
+    if (!isFullTab) return;
+
     const container = containerRef.current;
-    if (!container || !isFullTab) return;
+    if (!container) return;
 
-    const targetPaneContent = findNearestAncestorWithClass(container, "workspace-leaf-content");
-    if (!targetPaneContent) {
-      setIsFullTab(false);
-      return;
+    // 1. Locate nearest leaf content wrapper
+    const leaf = container.closest('.workspace-leaf-content');
+    if (!leaf) return;
+
+    // 2. Select the view-content container below the header
+    const contentWrapper = leaf.querySelector(':scope > .view-content') || leaf;
+    const currentParent = container.parentNode;
+    if (!currentParent) return;
+
+    // 3. Setup placeholder in standard DOM layout
+    stateRefs.originalParent = currentParent;
+    const placeholder = document.createElement("div");
+    placeholder.style.display = "none";
+    if (container.nextSibling) {
+      currentParent.insertBefore(placeholder, container.nextSibling);
+    } else {
+      currentParent.appendChild(placeholder);
     }
+    stateRefs.placeholder = placeholder;
 
-    const contentWrapper = findDirectChildByClass(targetPaneContent, "view-content") || targetPaneContent;
-    
-    stateRefs.originalParent = container.parentNode;
-    stateRefs.placeholder = document.createElement("div");
-    stateRefs.placeholder.style.display = "none";
-    container.parentNode.insertBefore(stateRefs.placeholder, container);
+    // 4. Inject impeccable status bar suppression stylesheet
+    const styleId = `sound-player-status-${instanceId}`;
+    let styleEl = document.getElementById(styleId);
+    if (!styleEl) {
+      styleEl = document.createElement('style');
+      styleEl.id = styleId;
+      styleEl.innerHTML = `
+        /* Hide global status bar and view footers */
+        .status-bar, .view-footer, .workspace-leaf-content-footer { 
+            display: none !important; 
+        }
+        
+        /* Expand workspace-leaf-content to edge-to-edge container */
+        .workspace-leaf-content { 
+            padding: 0 !important; 
+            margin: 0 !important; 
+            border-radius: 0 !important; 
+        }
+      `;
+      document.head.appendChild(styleEl);
+    }
 
     stateRefs.parentPositionInfo = {
       element: contentWrapper,
-      original: window.getComputedStyle(contentWrapper).position,
+      originalInlinePosition: contentWrapper.style.position,
     };
 
-    if (stateRefs.parentPositionInfo.original === "static") {
+    if (window.getComputedStyle(contentWrapper).position === 'static') {
       contentWrapper.style.position = "relative";
     }
 
+    // 5. Append component to view-content
     contentWrapper.appendChild(container);
+
+    requestAnimationFrame(() => {
+      Object.assign(contentWrapper.style, {
+        padding: "0",
+        margin: "0",
+        height: "100%",
+        width: "100%",
+        display: "block",
+        overflow: "hidden"
+      });
+    });
+
     Object.assign(container.style, {
       position: "absolute",
       top: "0",
@@ -434,19 +452,32 @@ function View({ folderPath, dc }) {
       width: "100%",
       height: "100%",
       zIndex: "9998",
-      overflow: "auto",
+      overflow: "hidden",
+      backgroundColor: "#000000",
     });
 
+    // 6. Graceful cleanup on unmount or fulltab minimize toggle
     return () => {
       if (stateRefs.placeholder?.parentNode) {
         stateRefs.placeholder.parentNode.replaceChild(container, stateRefs.placeholder);
+      } else if (stateRefs.originalParent) {
+        stateRefs.originalParent.appendChild(container);
       }
+
+      const el = document.getElementById(styleId);
+      if (el) el.remove();
+
       if (stateRefs.parentPositionInfo?.element) {
-        stateRefs.parentPositionInfo.element.style.position =
-          stateRefs.parentPositionInfo.original === "static" ? "" : stateRefs.parentPositionInfo.original;
+        const { element, originalInlinePosition } = stateRefs.parentPositionInfo;
+        element.style.position = originalInlinePosition || '';
+        element.style.padding = '';
+        element.style.margin = '';
+        element.style.height = '';
+        element.style.width = '';
+        element.style.overflow = '';
       }
+
       container.removeAttribute("style");
-      Object.keys(stateRefs).forEach((key) => (stateRefs[key] = null));
     };
   }, [isFullTab]);
 
@@ -457,151 +488,33 @@ function View({ folderPath, dc }) {
 
   const handleEnterFullTab = () => setIsFullTab(true);
 
-  // Compact mode
-  if (!isFullTab) {
-    return (
-      <div ref={containerRef} style={STYLES.compactWrapper}>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <dc.Icon icon="music" style={{ fontSize: "16px", color: "#8b5cf6" }} />
-          <p style={STYLES.compactText}>Sound Player</p>
-        </div>
-        <button 
-          style={STYLES.button} 
-          onClick={handleEnterFullTab}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <dc.Icon icon="maximize" style={{ fontSize: "14px" }} />
-            <span>Enter Full Tab</span>
-          </div>
-        </button>
-      </div>
-    );
-  }
-
-  // Full-tab mode
   return (
-    <div ref={containerRef}>
+    <div ref={containerRef} style={{ width: "100%", height: "100%" }}>
       <style>{STYLES.hoverEffectStyle}</style>
-      <div style={STYLES.fullTabWrapper} className={uniqueWrapperClass}>
-        <div
-          style={STYLES.exitIcon}
-          className="subtle-icon"
-          onClick={handleExitFullTab}
-        >
-          <dc.Icon icon="minimize" style={{ fontSize: "20px" }} />
-          <span className="exit-tooltip" style={STYLES.tooltip}>
-            Close Full Mode
-          </span>
-        </div>
-
-        <div style={STYLES.playerContainer}>
-          <div>
-            <div style={STYLES.title}>⦿ SOUND PLAYER ⦿</div>
-            <div style={STYLES.subtitle}>B E T O . 8 8 8</div>
-          </div>
-
-          {/* Drag and Drop Zone */}
-          <div
-            style={{
-              ...STYLES.dropZone,
-              ...(isDragging ? STYLES.dropZoneActive : {})
-            }}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-          >
-            <div style={{ fontSize: "32px", marginBottom: "10px", color: isDragging ? "#8b5cf6" : "#6b7280" }}>
-              {isDragging ? (
-                <dc.Icon icon="circle-dot" style={{ fontSize: "32px" }} />
-              ) : (
-                <dc.Icon icon="upload" style={{ fontSize: "32px" }} />
-              )}
-            </div>
-            <div style={{ letterSpacing: "2px" }}>
-              {isDragging ? "DROP FILE HERE" : "DRAG & DROP AUDIO FILE"}
-            </div>
-            <div style={{ fontSize: "11px", marginTop: "8px", color: "#4b5563", display: "flex", gap: "8px", alignItems: "center", justifyContent: "center" }}>
-              <dc.Icon icon="file-audio" style={{ fontSize: "12px" }} />
-              <span>.WAV • .MP3 • .MP4</span>
-            </div>
-          </div>
-
-          {/* Current Track */}
-          <div style={{ 
-            textAlign: "center", 
-            color: "#8b5cf6", 
-            fontSize: "13px", 
-            fontFamily: "monospace",
-            letterSpacing: "1px",
-            padding: "10px",
-            backgroundColor: "#000000",
-            borderRadius: "6px",
-            border: "1px solid #2d2d2d",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "10px"
-          }}>
-            <dc.Icon icon="music" style={{ fontSize: "16px" }} />
-            <span>NOW PLAYING: {fileName}</span>
-          </div>
-
-          {/* Play/Pause Button */}
-          <div
-            style={{
-              ...STYLES.playButton,
-              ...(isPlaying ? {
-                backgroundColor: "#2d1f3d",
-                boxShadow: "0 0 30px rgba(139, 92, 246, 0.6)",
-              } : {})
-            }}
-            onClick={togglePlay}
-          >
-            {isPlaying ? (
-              <dc.Icon icon="pause" style={{ fontSize: "28px" }} />
-            ) : (
-              <dc.Icon icon="play" style={{ fontSize: "28px", marginLeft: "4px" }} />
-            )}
-          </div>
-
-          {/* Progress Bar */}
-          <div>
-            <div style={STYLES.progressContainer} onClick={handleProgressClick}>
-              <div
-                style={{
-                  ...STYLES.progressBar,
-                  width: `${duration ? (currentTime / duration) * 100 : 0}%`,
-                }}
-              />
-            </div>
-            <div style={STYLES.timeDisplay}>
-              <span>{formatTime(currentTime)}</span>
-              <span>{formatTime(duration)}</span>
-            </div>
-          </div>
-
-          {/* Volume Control */}
-          <div style={STYLES.volumeContainer}>
-            <dc.Icon icon="volume-2" style={{ fontSize: "18px", color: "#8b5cf6" }} />
-            <div style={STYLES.volumeSlider} onClick={handleVolumeChange}>
-              <div
-                style={{
-                  ...STYLES.volumeBar,
-                  width: `${volume * 100}%`,
-                }}
-              />
-            </div>
-            <span style={{ fontSize: "12px", color: "#6b7280", fontFamily: "monospace", minWidth: "40px" }}>
-              {Math.round(volume * 100)}%
-            </span>
-          </div>
-
-          {/* Hidden audio element */}
-          <audio ref={audioRef} src={audioSrc} />
-        </div>
-      </div>
+      <AudioControls
+        dc={dc}
+        isPlaying={isPlaying}
+        togglePlay={togglePlay}
+        currentTime={currentTime}
+        duration={duration}
+        formatTime={formatTime}
+        handleProgressClick={handleProgressClick}
+        volume={volume}
+        handleVolumeChange={handleVolumeChange}
+        fileName={fileName}
+        isDragging={isDragging}
+        handleDragOver={handleDragOver}
+        handleDragLeave={handleDragLeave}
+        handleDrop={handleDrop}
+        isFullTab={isFullTab}
+        handleExitFullTab={handleExitFullTab}
+        handleEnterFullTab={handleEnterFullTab}
+        STYLES={STYLES}
+        uniqueWrapperClass={uniqueWrapperClass}
+      />
+      <audio ref={audioRef} src={audioSrc} />
     </div>
   );
 }
 
-return { View };
+return { App };

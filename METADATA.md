@@ -1,34 +1,39 @@
 ---
 author: beto.group
 contributor: []
-version: 1.0.3
-id: sound-player-591
+version: 2.0.0
+id: sound-player-417
 name: SOUND PLAYER
-description: A minimalist, single-track audio player featuring drag-and-drop file loading and a clean, distraction-free full-pane interface.
+description: An interactive, modern digital audio player supporting custom drag & drop audio tracks and live volume/progress sliders.
 status: stable
 complexity: plug-n-play
 category:
   - utility
 tags:
-  - drag-and-drop
   - audio
-  - mp3
-  - wav
-  - minimalist
-  - media-player
-  - sound
+  - player
+  - music
+  - media
+  - interactive
+  - ui
+compatibility:
+  - Obsidian >=1.5.0
+repository:
+  - https://github.com/beto-group/SoundPlayer
+missing: []
 resources:
-  - assets/soundplayer.clip.gif
   - assets/sound_player.webp
-  - assets/beto.minigame.soundtrack.wav
+  - assets/soundplayer.clip.gif
+  - assets/music/beto.minigame.soundtrack.wav
 type: DatacoreComponent
 target: Datacore
 security:
-  - Sandboxed
+  - Vault
+  - NodeFS
 storage:
-  - LocalState
-network: Offline
-runtime: PureJS
+  - File
+network: Offline (No external connections)
+runtime: React
 entry_point: SOUND PLAYER.md
 logic: src/index.jsx
 ---
